@@ -19,7 +19,7 @@ export default function Skills() {
             const Icon = CATEGORY_ICONS[i % CATEGORY_ICONS.length];
             return (
               <Reveal key={category.title} delay={i * 0.06} className="h-full">
-                <div className="h-full rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-accent/50">
+                <div className="h-full rounded-2xl border border-border bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_18px_40px_-18px_var(--glow)]">
                   <div className="flex items-center gap-3">
                     <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-soft text-accent">
                       <Icon className="h-5 w-5" />

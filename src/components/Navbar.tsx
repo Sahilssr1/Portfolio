@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/data/content";
 import ThemeToggle from "./ThemeToggle";
@@ -12,6 +12,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("home");
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.4 });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -44,12 +46,17 @@ export default function Navbar() {
           : "border-b border-transparent bg-transparent"
       }`}
     >
+      <motion.div
+        aria-hidden="true"
+        style={{ scaleX: progress }}
+        className="absolute inset-x-0 top-0 h-[2.5px] origin-left bg-gradient-to-r from-[var(--grad-1)] via-[var(--grad-2)] to-[var(--grad-3)]"
+      />
       <nav
         aria-label="Primary"
         className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-5 sm:px-8"
       >
         <a href="#home" className="font-display text-lg font-bold tracking-tight text-foreground">
-          Sahil<span className="text-accent"> Kumar</span>
+          Sahil<span className="text-gradient"> Kumar</span>
         </a>
 
         <ul className="hidden items-center gap-1 lg:flex">
@@ -83,7 +90,7 @@ export default function Navbar() {
           <ThemeToggle />
           <a
             href="#contact"
-            className="hidden rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.03] sm:inline-block"
+            className="btn-primary hidden rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.03] sm:inline-block"
           >
             Let&apos;s Talk
           </a>
@@ -126,7 +133,7 @@ export default function Navbar() {
                 <a
                   href="#contact"
                   onClick={() => setOpen(false)}
-                  className="block rounded-full bg-accent px-5 py-3 text-center text-sm font-semibold text-white"
+                  className="btn-primary block rounded-full px-5 py-3 text-center text-sm font-semibold text-white"
                 >
                   Let&apos;s Talk
                 </a>

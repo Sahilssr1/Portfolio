@@ -2,10 +2,17 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, ExternalLink, Github, Play, Trophy, X } from "lucide-react";
+import { Check, Dumbbell, ExternalLink, Github, Mic, Play, Trophy, Users, X } from "lucide-react";
 import { projects, type Project } from "@/data/content";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
+import { handleSpotlightMove } from "./useSpotlight";
+
+const PROJECT_ART: Record<string, { gradient: string; Icon: typeof Dumbbell }> = {
+  atheleos: { gradient: "from-violet-600 via-indigo-600 to-blue-600", Icon: Dumbbell },
+  hrms: { gradient: "from-cyan-500 via-sky-600 to-blue-700", Icon: Users },
+  "ai-voice": { gradient: "from-fuchsia-600 via-violet-600 to-indigo-700", Icon: Mic },
+};
 
 function LinkIcon({ kind }: { kind: Project["links"][number]["kind"] }) {
   if (kind === "repo") return <Github className="h-4 w-4" />;
@@ -42,15 +49,34 @@ export default function Projects() {
           description="Real products, built end to end — a live social platform, a production HR system, and an open-source AI voice platform."
         />
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {projects.map((project, i) => (
+          {projects.map((project, i) => {
+            const art = PROJECT_ART[project.id] ?? PROJECT_ART.atheleos;
+            const ArtIcon = art.Icon;
+            return (
             <Reveal key={project.id} delay={i * 0.08} className="h-full">
-              <article className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_16px_44px_-18px_var(--accent)]">
-                <div className="flex items-center justify-between gap-3">
-                  <span className="rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent">
+              <article
+                onMouseMove={handleSpotlightMove}
+                className="spotlight group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/60 hover:shadow-[0_24px_50px_-20px_var(--glow)]"
+              >
+                {/* gradient cover band */}
+                <div className={`relative h-32 shrink-0 overflow-hidden bg-gradient-to-br ${art.gradient}`}>
+                  <div className="bg-grid absolute inset-0 opacity-60" aria-hidden="true" />
+                  <span
+                    className="font-display absolute -bottom-5 left-4 text-[88px] leading-none font-bold text-white/15 select-none"
+                    aria-hidden="true"
+                  >
+                    0{i + 1}
+                  </span>
+                  <ArtIcon
+                    className="absolute right-4 bottom-3 h-14 w-14 text-white/25 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6"
+                    aria-hidden="true"
+                  />
+                  <span className="absolute top-4 right-4 rounded-full bg-black/30 px-3 py-1 text-[11px] font-semibold text-white backdrop-blur-sm">
                     {project.status}
                   </span>
                 </div>
-                <h3 className="font-display mt-5 text-[22px] font-bold text-foreground">{project.name}</h3>
+                <div className="flex flex-1 flex-col p-6">
+                <h3 className="font-display text-[22px] font-bold text-foreground">{project.name}</h3>
                 <p className="mt-1 text-sm font-medium text-accent-2">{project.tagline}</p>
                 <p className="mt-3 line-clamp-3 text-[15px] leading-relaxed text-muted">{project.description}</p>
                 {project.highlight ? (
@@ -75,7 +101,7 @@ export default function Projects() {
                   <button
                     type="button"
                     onClick={() => setSelected(project)}
-                    className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-transform hover:scale-[1.03]"
+                    className="btn-primary rounded-full px-4 py-2 text-sm font-semibold text-white transition-transform hover:scale-[1.03]"
                     aria-haspopup="dialog"
                   >
                     View Details
@@ -93,9 +119,11 @@ export default function Projects() {
                     </a>
                   ))}
                 </div>
+                </div>
               </article>
             </Reveal>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -117,7 +145,7 @@ export default function Projects() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 24, scale: 0.98 }}
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className="max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-t-3xl bg-surface p-6 shadow-2xl sm:rounded-3xl sm:p-8"
+              className="max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-t-3xl border border-border bg-surface p-6 shadow-[0_40px_90px_-30px_var(--glow)] sm:rounded-3xl sm:p-8"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-start justify-between gap-4">
@@ -163,13 +191,17 @@ export default function Projects() {
                 ))}
               </ul>
               <div className="mt-8 flex flex-wrap gap-2.5">
-                {selected.links.map((link) => (
+                {selected.links.map((link, li) => (
                   <a
                     key={link.label}
                     href={link.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.03]"
+                    className={
+                      li === 0
+                        ? "btn-primary inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.03]"
+                        : "inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-accent"
+                    }
                   >
                     <LinkIcon kind={link.kind} />
                     {link.label}

@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Inter, JetBrains_Mono, Playfair_Display, Space_Grotesk } from "next/font/google";
 import { siteConfig } from "@/data/content";
+import Providers from "@/components/Providers";
+import IntroCurtain from "@/components/IntroCurtain";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,6 +20,14 @@ const spaceGrotesk = Space_Grotesk({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  style: ["italic"],
+  weight: ["500", "600"],
   display: "swap",
 });
 
@@ -67,8 +77,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
-        {children}
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${playfair.variable}`}
+      >
+        <Providers>
+          <IntroCurtain />
+          {children}
+        </Providers>
       </body>
     </html>
   );

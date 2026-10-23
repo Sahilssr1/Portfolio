@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-5 sm:px-8 md:flex-row md:justify-between">
         <div className="text-center md:text-left">
           <p className="font-display text-base font-bold text-foreground">
-            Sahil<span className="text-accent"> Kumar</span>
+            Sahil<span className="text-gradient"> Kumar</span>
           </p>
           <p className="mt-1 text-sm text-muted">Building scalable applications and thoughtful digital experiences.</p>
           <p className="mt-2 text-xs text-muted">© {year} Sahil Kumar. All rights reserved.</p>

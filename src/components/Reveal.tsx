@@ -11,7 +11,7 @@ interface RevealProps {
 }
 
 /** Fade-and-rise reveal on scroll; honours prefers-reduced-motion. */
-export default function Reveal({ children, delay = 0, className, y = 22 }: RevealProps) {
+export default function Reveal({ children, delay = 0, className, y = 26 }: RevealProps) {
   const reduce = useReducedMotion();
   if (reduce) {
     return <div className={className}>{children}</div>;
@@ -19,10 +19,10 @@ export default function Reveal({ children, delay = 0, className, y = 22 }: Revea
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y, filter: "blur(6px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>

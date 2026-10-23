@@ -150,7 +150,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={submitState === "sending" || submitState === "sent"}
-                className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-60"
+                className="btn-primary mt-6 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {submitState === "sending" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 {submitState === "sending" ? "Sending…" : submitState === "sent" ? "Message Sent" : "Send Message"}
