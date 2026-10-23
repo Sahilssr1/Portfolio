@@ -14,6 +14,14 @@ export const siteConfig = {
   github: "https://github.com/Sahilssr1",
   githubUsername: "Sahilssr1",
   linkedin: "https://linkedin.com/in/sahil-kumar-82a785312",
+  /**
+   * LinkedIn shows NO public API for personal-profile stats (unlike GitHub),
+   * so these two numbers are maintained by hand — copy them from your own
+   * LinkedIn profile ("followers" / "connections" shown under your name).
+   * Leave null to hide a stat from the LinkedIn bar.
+   */
+  linkedinFollowers: null as number | null,
+  linkedinConnections: null as number | null,
   resumePath: "/Sahil_Kumar_Resume.pdf",
   /** Flip to false to hide the availability badge in the hero. */
   showAvailability: true,

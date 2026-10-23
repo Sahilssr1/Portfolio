@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, Download, Github, Hand, Linkedin } from "lucide-react";
+import { ArrowDown, Download, Github, Hand, Linkedin, Zap } from "lucide-react";
 import Image from "next/image";
 import { siteConfig } from "@/data/content";
 
@@ -104,7 +104,7 @@ export default function Hero() {
 
   return (
     <section id="home" ref={sectionRef} className="dots relative overflow-hidden pt-[76px]">
-      <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 pt-12 pb-16 sm:px-8 lg:grid-cols-[1.08fr_0.92fr] lg:pt-16 lg:pb-24">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 pt-8 pb-10 sm:px-8 lg:min-h-[calc(100svh-76px)] lg:grid-cols-[1.08fr_0.92fr] lg:pt-8 lg:pb-10">
         <div>
           {siteConfig.showAvailability ? (
             <motion.p {...popIn(0.05)}>
@@ -113,48 +113,48 @@ export default function Hero() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink opacity-50" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-ink" />
                 </span>
-                ★ Open to Work — Let&apos;s Build Something
+                Open to Work — Let&apos;s Build Something
               </span>
             </motion.p>
           ) : null}
 
-          <h1 aria-label="Sahil Kumar — Full Stack Developer" className="font-display mt-8 uppercase">
+          <h1 aria-label="Sahil Kumar — Full Stack Developer" className="font-display mt-6 uppercase">
             <MegaLine
               text="Sahil"
               reduce={!!reduce}
               delayBase={0.12}
-              className="text-[clamp(4rem,9.5vw,7.5rem)] leading-[0.95] text-ink"
+              className="text-[clamp(2.9rem,7.2vw,5.6rem)] leading-[0.95] text-ink"
             />
             <span className="flex items-center gap-3 sm:gap-5">
               <MegaLine
                 text="Kumar"
                 reduce={!!reduce}
                 delayBase={0.38}
-                className="shrink-0 text-[clamp(4rem,9.5vw,7.5rem)] leading-[0.95] text-pop-violet"
+                className="shrink-0 text-[clamp(2.9rem,7.2vw,5.6rem)] leading-[0.95] text-pop-violet"
               />
               <motion.span
                 aria-hidden="true"
                 initial={{ scale: 0, rotate: -40 }}
-                animate={{ scale: 1, rotate: 12 }}
+                animate={{ scale: 1, rotate: 10 }}
                 transition={
                   reduce ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 12, delay: 0.72 }
                 }
-                className="text-[clamp(3rem,7vw,5.5rem)] leading-none text-pop-yellow [-webkit-text-stroke:3px_#141414]"
+                className="pop-sm flex h-[clamp(2.9rem,5.5vw,4.4rem)] w-[clamp(2.9rem,5.5vw,4.4rem)] shrink-0 items-center justify-center rounded-full bg-pop-pink"
               >
-                ★
+                <Zap className="h-[55%] w-[55%] fill-ink text-ink" />
               </motion.span>
             </span>
             <MegaLine
               text="Full-Stack"
               reduce={!!reduce}
               delayBase={0.62}
-              className="text-[clamp(2.3rem,5.4vw,4.3rem)] leading-[1.05] text-ink"
+              className="text-[clamp(1.8rem,4.2vw,3.3rem)] leading-[1.02] text-ink"
             />
             <MegaLine
               text="Developer"
               reduce={!!reduce}
               delayBase={0.95}
-              className="text-[clamp(2.3rem,5.4vw,4.3rem)] leading-[1.05] text-pop-pink"
+              className="text-[clamp(1.8rem,4.2vw,3.3rem)] leading-[1.02] text-pop-pink"
             />
           </h1>
 
@@ -163,7 +163,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={reduce ? { duration: 0 } : { delay: 1.15, duration: 0.45, ease: "easeOut" }}
-            className="mt-7"
+            className="mt-5"
           >
             {reduce ? (
               <p className="font-label pop-sm inline-block rounded-full bg-paper px-4 py-2 text-sm tracking-[0.1em] text-ink uppercase">
@@ -187,7 +187,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={reduce ? { duration: 0 } : { delay: 1.28, duration: 0.5, ease: "easeOut" }}
-            className="mt-6 max-w-xl text-xl leading-snug font-semibold text-ink"
+            className="mt-5 max-w-xl text-lg leading-snug font-semibold text-ink"
           >
             I build{" "}
             <span className="pop-sm inline-block -rotate-1 bg-pop-yellow px-2 py-0.5">web, mobile &amp; AI products</span>{" "}
@@ -197,7 +197,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={reduce ? { duration: 0 } : { delay: 1.36, duration: 0.5, ease: "easeOut" }}
-            className="mt-4 max-w-xl text-[15px] leading-relaxed font-medium text-ink/70"
+            className="mt-3 max-w-xl text-[15px] leading-relaxed font-medium text-ink/70"
           >
             I&apos;m a full-stack developer focused on building reliable web and mobile applications, backend APIs,
             database-driven systems, and modern user experiences.
@@ -207,18 +207,18 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={reduce ? { duration: 0 } : { delay: 1.46, duration: 0.5, ease: "easeOut" }}
-            className="mt-9 flex flex-wrap items-center gap-4"
+            className="mt-7 flex flex-wrap items-center gap-4"
           >
             <a
               href="#projects"
-              className="pop pop-hover pop-press font-label inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 text-base tracking-[0.08em] text-cream uppercase"
+              className="pop pop-hover pop-press font-label inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm tracking-[0.08em] text-cream uppercase"
             >
               See My Work <ArrowDown className="h-4 w-4" />
             </a>
             <a
               href={siteConfig.resumePath}
               download
-              className="pop pop-hover pop-press font-label inline-flex items-center gap-2 rounded-full bg-paper px-7 py-3.5 text-base tracking-[0.08em] text-ink uppercase"
+              className="pop pop-hover pop-press font-label inline-flex items-center gap-2 rounded-full bg-paper px-6 py-3 text-sm tracking-[0.08em] text-ink uppercase"
             >
               <Download className="h-4 w-4" />
               Resume
@@ -229,7 +229,7 @@ export default function Hero() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Sahil Kumar on GitHub"
-                className="pop-sm pop-hover inline-flex h-12 w-12 rotate-2 items-center justify-center rounded-2xl bg-paper text-ink"
+                className="pop-sm pop-hover inline-flex h-11 w-11 rotate-2 items-center justify-center rounded-2xl bg-paper text-ink"
               >
                 <Github className="h-5 w-5" />
               </a>
@@ -238,7 +238,7 @@ export default function Hero() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Sahil Kumar on LinkedIn"
-                className="pop-sm pop-hover inline-flex h-12 w-12 -rotate-2 items-center justify-center rounded-2xl bg-paper text-ink"
+                className="pop-sm pop-hover inline-flex h-11 w-11 -rotate-2 items-center justify-center rounded-2xl bg-paper text-ink"
               >
                 <Linkedin className="h-5 w-5" />
               </a>
@@ -249,7 +249,7 @@ export default function Hero() {
             initial="hidden"
             animate="show"
             variants={{ show: { transition: { staggerChildren: reduce ? 0 : 0.05, delayChildren: 1.55 } } }}
-            className="mt-10 flex flex-wrap gap-2.5"
+            className="mt-7 flex flex-wrap gap-2.5"
             aria-label="Core technologies"
           >
             {STACK.map((tech, i) => (
@@ -269,7 +269,7 @@ export default function Hero() {
         </div>
 
         {/* Mascot sticker card */}
-        <motion.div style={reduce ? undefined : { y: mascotY }} className="relative mx-auto w-full max-w-[380px]">
+        <motion.div style={reduce ? undefined : { y: mascotY }} className="relative mx-auto w-full max-w-[300px] sm:max-w-[330px]">
           <motion.div
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.8, rotate: 10 }}
             animate={{ opacity: 1, scale: 1, rotate: 3 }}
@@ -301,12 +301,12 @@ export default function Hero() {
               transition={
                 reduce ? { duration: 0 } : { type: "spring", stiffness: 240, damping: 12, delay: 1.0 }
               }
-              className="pop-sm font-label absolute -top-7 -left-5 flex h-[118px] w-[118px] flex-col items-center justify-center rounded-full bg-pop-yellow text-center text-[12px] leading-tight tracking-wide text-ink uppercase sm:-left-9"
+              className="pop-sm font-label absolute -top-7 -left-5 flex h-[104px] w-[104px] flex-col items-center justify-center rounded-full bg-pop-yellow text-center text-[11px] leading-tight tracking-wide text-ink uppercase sm:-left-9"
               aria-label="5,000 plus downloads on Google Play"
             >
-              <span className="text-xl font-bold">5,000+</span>
+              <span className="text-lg font-bold">5,000+</span>
               <span>Downloads</span>
-              <span>on Play ★</span>
+              <span>on Play Store</span>
             </motion.div>
 
             {/* live sticker */}
@@ -327,7 +327,7 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <div className="relative pb-9 text-center">
+      <div className="relative pb-6 text-center">
         <a
           href="#about"
           aria-label="Scroll down to About"

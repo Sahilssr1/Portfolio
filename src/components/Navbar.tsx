@@ -51,10 +51,16 @@ export default function Navbar() {
       <nav aria-label="Primary" className="mx-auto flex h-[76px] max-w-6xl items-center justify-between px-5 sm:px-8">
         <a
           href="#home"
-          className="pop-sm font-display inline-block -rotate-2 bg-ink px-3.5 py-2 text-lg text-pop-yellow transition-transform hover:rotate-0"
+          className="group inline-flex -rotate-2 items-center gap-2.5 transition-transform duration-300 hover:rotate-0"
           aria-label="Sahil Kumar — home"
         >
-          SK<span className="text-pop-pink">★</span>
+          <span className="pop-sm font-display inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-ink text-[15px] text-pop-yellow">
+            {"</>"}
+          </span>
+          <span className="font-display leading-none text-ink">
+            <span className="block text-[17px] tracking-[0.08em]">SAHIL</span>
+            <span className="mt-1 block text-[10px] tracking-[0.42em] text-pop-violet">KUMAR</span>
+          </span>
         </a>
 
         <ul className="pop hidden items-center gap-1 rounded-full bg-paper px-2.5 py-2 lg:flex">

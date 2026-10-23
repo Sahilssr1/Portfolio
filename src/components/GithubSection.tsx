@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ExternalLink, GitFork, Github, Star } from "lucide-react";
+import { ExternalLink, GitFork, Github, Linkedin, Star } from "lucide-react";
 import { featuredRepos, siteConfig } from "@/data/content";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
@@ -127,7 +127,7 @@ export default function GithubSection() {
         {state.status === "ready" ? (
           <>
             <Reveal>
-              <div className="pop mb-9 flex flex-wrap items-center gap-x-9 gap-y-3 rounded-3xl bg-paper px-6 py-5">
+              <div className="pop mb-5 flex flex-wrap items-center gap-x-9 gap-y-3 rounded-3xl bg-paper px-6 py-5">
                 <span className="inline-flex items-center gap-2.5 text-[15px] font-medium text-ink/70">
                   <span className="pop-sm flex h-9 w-9 items-center justify-center rounded-xl bg-ink text-cream">
                     <Github className="h-5 w-5" />
@@ -146,6 +146,40 @@ export default function GithubSection() {
                   target="_blank"
                   rel="noreferrer"
                   className="pop-sm pop-hover pop-press font-label ml-auto inline-flex items-center gap-1.5 rounded-full bg-pop-yellow px-4 py-2 text-[13px] tracking-[0.08em] text-ink uppercase"
+                >
+                  View profile
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </div>
+            </Reveal>
+
+            {/* LinkedIn bar — same style as GitHub. LinkedIn has no public stats API,
+                so follower/connection counts come from siteConfig (set by hand). */}
+            <Reveal>
+              <div className="pop mb-9 flex flex-wrap items-center gap-x-9 gap-y-3 rounded-3xl bg-paper px-6 py-5">
+                <span className="inline-flex items-center gap-2.5 text-[15px] font-medium text-ink/70">
+                  <span className="pop-sm flex h-9 w-9 items-center justify-center rounded-xl bg-[#0a66c2] text-cream">
+                    <Linkedin className="h-5 w-5" />
+                  </span>
+                  <span className="font-bold text-ink">{siteConfig.name}</span>
+                  <span className="hidden sm:inline">on LinkedIn</span>
+                </span>
+                {siteConfig.linkedinFollowers !== null ? (
+                  <span className="text-[15px] font-medium text-ink/70">
+                    <span className="font-display text-xl text-ink">{siteConfig.linkedinFollowers}</span> followers
+                  </span>
+                ) : null}
+                {siteConfig.linkedinConnections !== null ? (
+                  <span className="text-[15px] font-medium text-ink/70">
+                    <span className="font-display text-xl text-ink">{siteConfig.linkedinConnections}</span>{" "}
+                    connections
+                  </span>
+                ) : null}
+                <a
+                  href={siteConfig.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="pop-sm pop-hover pop-press font-label ml-auto inline-flex items-center gap-1.5 rounded-full bg-pop-sky px-4 py-2 text-[13px] tracking-[0.08em] text-ink uppercase"
                 >
                   View profile
                   <ExternalLink className="h-4 w-4" />
