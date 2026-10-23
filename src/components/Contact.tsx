@@ -16,7 +16,7 @@ const formSchema = z.object({
 });
 
 type FormValues = z.infer<typeof formSchema>;
-type SubmitState = "idle" | "sending" | "sent" | "not-configured" | "failed";
+type SubmitState = "idle" | "sending" | "sent" | "activation" | "failed";
 
 const inputClasses =
   "w-full rounded-2xl border-[3px] border-ink bg-paper px-4 py-3 text-[15px] font-medium text-ink placeholder:text-ink/40 transition-shadow focus:shadow-[4px_4px_0_#141414] focus:outline-none";
@@ -28,31 +28,37 @@ export default function Contact() {
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm<FormValues>({ resolver: zodResolver(formSchema) });
 
-  const mailtoHref = () => {
-    const { name, email, message } = getValues();
-    const subject = encodeURIComponent(`Portfolio enquiry from ${name || "your website"}`);
-    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
-    return `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
-  };
-
+  /**
+   * Delivered by FormSubmit (no-signup form relay) straight to Sahil's inbox.
+   * The endpoint was activated once via the link FormSubmit emailed to him;
+   * the visitor's address is sent as the message's email field and Reply-To.
+   */
   const onSubmit = async (values: FormValues) => {
     setSubmitState("sending");
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(`https://formsubmit.co/ajax/${siteConfig.email}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          message: values.message,
+          _subject: `Portfolio contact — ${values.name}`,
+          _template: "table",
+          _captcha: "false",
+        }),
       });
-      if (res.ok) {
+      const data = (await res.json().catch(() => null)) as { success?: string; message?: string } | null;
+      if (data?.success === "true") {
         setSubmitState("sent");
-        return;
+      } else if (data?.message && /activat/i.test(data.message)) {
+        setSubmitState("activation");
+      } else {
+        setSubmitState("failed");
       }
-      const data = (await res.json().catch(() => null)) as { error?: string } | null;
-      setSubmitState(data?.error === "NOT_CONFIGURED" ? "not-configured" : "failed");
     } catch {
       setSubmitState("failed");
     }
@@ -202,20 +208,17 @@ export default function Contact() {
                   Thank you — your message has been sent. I&apos;ll get back to you soon.
                 </p>
               ) : null}
-              {submitState === "not-configured" ? (
+              {submitState === "activation" ? (
                 <div className="pop-sm mt-5 rounded-2xl bg-pop-yellow px-4 py-3.5 text-sm font-semibold text-ink" role="status">
                   <p className="flex items-start gap-2">
                     <MailWarning className="mt-0.5 h-4 w-4 shrink-0" />
-                    The form&apos;s email service isn&apos;t configured on this deployment yet. You can still send
-                    your message instantly through your email app:
+                    The form is being activated right now — please send your message again in a minute, or email me
+                    directly at{" "}
+                    <a href={`mailto:${siteConfig.email}`} className="font-bold underline">
+                      {siteConfig.email}
+                    </a>
+                    .
                   </p>
-                  <a
-                    href={mailtoHref()}
-                    className="pop-sm pop-hover pop-press font-label mt-3 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm tracking-[0.06em] text-cream uppercase"
-                  >
-                    <Mail className="h-4 w-4" />
-                    Open in Email App
-                  </a>
                 </div>
               ) : null}
               {submitState === "failed" ? (
