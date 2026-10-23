@@ -1,13 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Playfair_Display, Space_Grotesk } from "next/font/google";
+import { Anton, Archivo_Black, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { siteConfig } from "@/data/content";
 import Providers from "@/components/Providers";
 import IntroCurtain from "@/components/IntroCurtain";
 import "./globals.css";
 
-const inter = Inter({
+const archivo = Archivo_Black({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: "400",
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const anton = Anton({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-anton",
   display: "swap",
 });
 
@@ -20,14 +28,6 @@ const spaceGrotesk = Space_Grotesk({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
-  display: "swap",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  style: ["italic"],
-  weight: ["500", "600"],
   display: "swap",
 });
 
@@ -62,24 +62,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a10" },
-    { media: "(prefers-color-scheme: light)", color: "#f7f7fa" },
-  ],
+  themeColor: "#f7f1e1",
 };
-
-/** Sets the theme class before first paint: stored preference, else dark (default). */
-const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.remove('dark');}else{document.documentElement.classList.add('dark');}}catch(e){document.documentElement.classList.add('dark');}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
-      <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${playfair.variable}`}
-      >
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${archivo.variable} ${anton.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
         <Providers>
           <IntroCurtain />
           {children}

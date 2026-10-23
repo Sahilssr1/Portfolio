@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/data/content";
-import ThemeToggle from "./ThemeToggle";
 
 const SECTION_IDS = ["home", "about", "experience", "projects", "skills", "contact"];
 
@@ -41,25 +40,24 @@ export default function Navbar() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-border bg-background/85 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent"
+        scrolled ? "border-b-[3px] border-ink bg-cream/95 backdrop-blur-md" : "bg-transparent"
       }`}
     >
       <motion.div
         aria-hidden="true"
         style={{ scaleX: progress }}
-        className="absolute inset-x-0 top-0 h-[2.5px] origin-left bg-gradient-to-r from-[var(--grad-1)] via-[var(--grad-2)] to-[var(--grad-3)]"
+        className="absolute inset-x-0 top-0 h-[5px] origin-left border-b-2 border-ink bg-pop-yellow"
       />
-      <nav
-        aria-label="Primary"
-        className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-5 sm:px-8"
-      >
-        <a href="#home" className="font-display text-lg font-bold tracking-tight text-foreground">
-          Sahil<span className="text-gradient"> Kumar</span>
+      <nav aria-label="Primary" className="mx-auto flex h-[76px] max-w-6xl items-center justify-between px-5 sm:px-8">
+        <a
+          href="#home"
+          className="pop-sm font-display inline-block -rotate-2 bg-ink px-3.5 py-2 text-lg text-pop-yellow transition-transform hover:rotate-0"
+          aria-label="Sahil Kumar — home"
+        >
+          SK<span className="text-pop-pink">★</span>
         </a>
 
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="pop hidden items-center gap-1 rounded-full bg-paper px-2.5 py-2 lg:flex">
           {navLinks.map((link) => {
             const id = link.href.slice(1);
             const isActive = active === id;
@@ -68,35 +66,34 @@ export default function Navbar() {
                 <a
                   href={link.href}
                   aria-current={isActive ? "true" : undefined}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                    isActive ? "text-foreground" : "text-muted hover:text-foreground"
+                  className={`font-label relative block rounded-full px-4 py-1.5 text-[15px] tracking-[0.08em] uppercase transition-colors ${
+                    isActive ? "text-cream" : "text-ink hover:bg-pop-yellow"
                   }`}
                 >
-                  {link.label}
+                  {isActive ? (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 rounded-full bg-ink"
+                      transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                    />
+                  ) : null}
+                  <span className="relative">{link.label}</span>
                 </a>
-                {isActive ? (
-                  <motion.span
-                    layoutId="nav-indicator"
-                    className="absolute inset-x-4 -bottom-[3px] h-[2px] rounded-full bg-accent"
-                    transition={{ type: "spring", stiffness: 400, damping: 34 }}
-                  />
-                ) : null}
               </li>
             );
           })}
         </ul>
 
         <div className="flex items-center gap-3">
-          <ThemeToggle />
           <a
             href="#contact"
-            className="btn-primary hidden rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.03] sm:inline-block"
+            className="pop-sm pop-hover pop-press font-label hidden rotate-1 rounded-full bg-pop-pink px-5 py-2.5 text-[15px] tracking-[0.08em] text-ink uppercase sm:inline-block"
           >
-            Let&apos;s Talk
+            Let&apos;s Talk →
           </a>
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-foreground lg:hidden"
+            className="pop-sm inline-flex h-11 w-11 items-center justify-center rounded-full bg-paper text-ink lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -115,27 +112,27 @@ export default function Navbar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="overflow-hidden border-b border-border bg-background/95 backdrop-blur-md lg:hidden"
+            className="overflow-hidden border-b-[3px] border-ink bg-cream lg:hidden"
           >
-            <ul className="space-y-1 px-5 py-4">
+            <ul className="space-y-2 px-5 py-4">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-base font-medium text-foreground hover:bg-surface-2"
+                    className="pop-sm font-label block rounded-2xl bg-paper px-4 py-3 text-base tracking-[0.08em] text-ink uppercase"
                   >
                     {link.label}
                   </a>
                 </li>
               ))}
-              <li className="pt-2">
+              <li className="pt-1">
                 <a
                   href="#contact"
                   onClick={() => setOpen(false)}
-                  className="btn-primary block rounded-full px-5 py-3 text-center text-sm font-semibold text-white"
+                  className="pop-sm font-label block rounded-full bg-pop-pink px-5 py-3 text-center text-base tracking-[0.08em] text-ink uppercase"
                 >
-                  Let&apos;s Talk
+                  Let&apos;s Talk →
                 </a>
               </li>
             </ul>

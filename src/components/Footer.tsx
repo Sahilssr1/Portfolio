@@ -6,49 +6,55 @@ import { siteConfig } from "@/data/content";
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="border-t border-border py-10">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-5 sm:px-8 md:flex-row md:justify-between">
-        <div className="text-center md:text-left">
-          <p className="font-display text-base font-bold text-foreground">
-            Sahil<span className="text-gradient"> Kumar</span>
-          </p>
-          <p className="mt-1 text-sm text-muted">Building scalable applications and thoughtful digital experiences.</p>
-          <p className="mt-2 text-xs text-muted">© {year} Sahil Kumar. All rights reserved.</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <a
-            href={siteConfig.github}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Sahil Kumar on GitHub"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-muted transition-colors hover:text-foreground"
-          >
-            <Github className="h-[18px] w-[18px]" />
-          </a>
-          <a
-            href={siteConfig.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Sahil Kumar on LinkedIn"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-muted transition-colors hover:text-foreground"
-          >
-            <Linkedin className="h-[18px] w-[18px]" />
-          </a>
-          <a
-            href={`mailto:${siteConfig.email}`}
-            aria-label="Email Sahil Kumar"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-muted transition-colors hover:text-foreground"
-          >
-            <Mail className="h-[18px] w-[18px]" />
-          </a>
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            aria-label="Back to top"
-            className="ml-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-accent text-white transition-transform hover:scale-105"
-          >
-            <ArrowUp className="h-[18px] w-[18px]" />
-          </button>
+    <footer className="dots-light overflow-hidden bg-ink pt-14">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <p className="font-display text-center text-[clamp(2.6rem,8.5vw,6.5rem)] leading-none whitespace-nowrap uppercase select-none">
+          <span className="text-outline">Sahil</span> <span className="text-cream">Kumar</span>
+          <span className="text-pop-yellow">★</span>
+        </p>
+        <div className="mt-10 flex flex-col items-center gap-6 pb-10 md:flex-row md:justify-between">
+          <div className="text-center md:text-left">
+            <p className="text-[15px] font-medium text-cream/80">
+              Building web, mobile &amp; AI products that actually ship.
+            </p>
+            <p className="mt-2 text-xs font-medium text-cream/45">© {year} Sahil Kumar. All rights reserved.</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href={siteConfig.github}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Sahil Kumar on GitHub"
+              className="inline-flex h-11 w-11 rotate-2 items-center justify-center rounded-2xl border-[2.5px] border-ink bg-cream text-ink shadow-[4px_4px_0_#7b61ff] transition-transform hover:-translate-y-1 hover:rotate-0"
+            >
+              <Github className="h-5 w-5" />
+            </a>
+            <a
+              href={siteConfig.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Sahil Kumar on LinkedIn"
+              className="inline-flex h-11 w-11 -rotate-2 items-center justify-center rounded-2xl border-[2.5px] border-ink bg-cream text-ink shadow-[4px_4px_0_#ff5cab] transition-transform hover:-translate-y-1 hover:rotate-0"
+            >
+              <Linkedin className="h-5 w-5" />
+            </a>
+            <a
+              href={`mailto:${siteConfig.email}`}
+              aria-label="Email Sahil Kumar"
+              className="inline-flex h-11 w-11 rotate-2 items-center justify-center rounded-2xl border-[2.5px] border-ink bg-cream text-ink shadow-[4px_4px_0_#31d0aa] transition-transform hover:-translate-y-1 hover:rotate-0"
+            >
+              <Mail className="h-5 w-5" />
+            </a>
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              aria-label="Back to top"
+              className="pop-sm font-label ml-1 inline-flex h-11 items-center gap-1.5 rounded-full bg-pop-yellow px-4 text-[13px] tracking-[0.1em] text-ink uppercase transition-transform hover:-translate-y-1"
+            >
+              <ArrowUp className="h-4 w-4" />
+              Top
+            </button>
+          </div>
         </div>
       </div>
     </footer>

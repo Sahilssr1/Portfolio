@@ -3,10 +3,10 @@ import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 
 const FACTS = [
-  { icon: Briefcase, label: "Current role", value: "Full Stack Developer · Sanjivani Media and Technology" },
-  { icon: Sparkles, label: "Experience", value: "Production web & mobile apps since August 2024" },
-  { icon: GraduationCap, label: "Education", value: "MCA (pursuing) · B.Sc. Information Technology" },
-  { icon: MapPin, label: "Based in", value: "Patna, India · Open to opportunities across India & remote" },
+  { icon: Briefcase, label: "Current role", value: "Full Stack Developer · Sanjivani Media and Technology", chip: "bg-pop-pink" },
+  { icon: Sparkles, label: "Experience", value: "Production web & mobile apps since August 2024", chip: "bg-pop-yellow" },
+  { icon: GraduationCap, label: "Education", value: "MCA (pursuing) · B.Sc. Information Technology", chip: "bg-pop-mint" },
+  { icon: MapPin, label: "Based in", value: "Patna, India · Open to opportunities across India & remote", chip: "bg-pop-sky" },
 ];
 
 const INTERESTS = [
@@ -19,34 +19,48 @@ const INTERESTS = [
 
 export default function About() {
   return (
-    <section id="about" className="scroll-mt-24 py-24">
+    <section id="about" className="dots-light scroll-mt-24 bg-pop-violet py-24">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <SectionHeading eyebrow="About" title="About Me" />
+        <SectionHeading
+          eyebrow="About"
+          title="About Me"
+          accentClass="bg-pop-yellow"
+          shadowClass="pop-sm"
+          tone="cream"
+        />
         <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <Reveal>
-            <div className="space-y-5 text-base leading-relaxed text-muted">
+            <div className="space-y-5 text-base leading-relaxed font-medium text-cream/90">
               <p>
-                I&apos;m a <span className="font-semibold text-foreground">software engineer and full-stack developer</span>{" "}
+                I&apos;m a{" "}
+                <span className="pop-sm inline-block -rotate-1 bg-pop-yellow px-2 py-0.5 font-bold text-ink">
+                  software engineer and full-stack developer
+                </span>{" "}
                 at Sanjivani Media and Technology, where I build production web applications with C#, ASP.NET, and
                 MySQL — from backend business logic and REST APIs to responsive, database-driven interfaces.
               </p>
               <p>
-                My professional journey began in <span className="font-semibold text-foreground">August 2024</span> as a web
+                My professional journey began in <span className="font-bold text-cream">August 2024</span> as a web
                 development intern at the same company, and I moved into a full-time developer role in{" "}
-                <span className="font-semibold text-foreground">March 2025</span>. Alongside my job, I build complete products of
+                <span className="font-bold text-cream">March 2025</span>. Alongside my job, I build complete products of
                 my own — a sports social platform, an HR system used by thousands, and an open-source AI voice
                 calling platform.
               </p>
               <p>
-                I&apos;m pursuing a <span className="font-semibold text-foreground">Master of Computer Applications</span> at Lovely
+                I&apos;m pursuing a <span className="font-bold text-cream">Master of Computer Applications</span> at Lovely
                 Professional University (expected 2027), after completing a B.Sc. in Information Technology from
                 Patliputra University in 2025.
               </p>
               <div className="pt-2">
-                <p className="mb-3 text-sm font-semibold tracking-wide text-foreground uppercase">What I enjoy working on</p>
-                <ul className="flex flex-wrap gap-2">
+                <p className="font-label mb-3 text-sm tracking-[0.16em] text-cream uppercase">
+                  ★ What I enjoy working on
+                </p>
+                <ul className="flex flex-wrap gap-2.5">
                   {INTERESTS.map((interest) => (
-                    <li key={interest} className="rounded-full border border-border bg-surface px-3.5 py-1.5 text-sm text-muted">
+                    <li
+                      key={interest}
+                      className="pop-sm cursor-default rounded-full bg-cream px-3.5 py-1.5 text-sm font-semibold text-ink transition-transform hover:-rotate-2"
+                    >
                       {interest}
                     </li>
                   ))}
@@ -55,15 +69,20 @@ export default function About() {
             </div>
           </Reveal>
           <Reveal delay={0.12}>
-            <ul className="space-y-4">
-              {FACTS.map((fact) => (
-                <li key={fact.label} className="flex gap-4 rounded-2xl border border-border bg-surface p-5">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
+            <ul className="space-y-5">
+              {FACTS.map((fact, i) => (
+                <li
+                  key={fact.label}
+                  className={`pop flex gap-4 rounded-3xl bg-cream p-5 ${i % 2 === 0 ? "-rotate-[0.6deg]" : "rotate-[0.6deg]"}`}
+                >
+                  <span
+                    className={`pop-sm flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-ink ${fact.chip}`}
+                  >
                     <fact.icon className="h-5 w-5" />
                   </span>
                   <span>
-                    <span className="block text-xs font-semibold tracking-widest text-muted uppercase">{fact.label}</span>
-                    <span className="mt-1 block text-sm leading-relaxed font-medium text-foreground">{fact.value}</span>
+                    <span className="font-label block text-xs tracking-[0.16em] text-ink/55 uppercase">{fact.label}</span>
+                    <span className="mt-1 block text-sm leading-relaxed font-bold text-ink">{fact.value}</span>
                   </span>
                 </li>
               ))}

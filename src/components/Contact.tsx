@@ -19,7 +19,9 @@ type FormValues = z.infer<typeof formSchema>;
 type SubmitState = "idle" | "sending" | "sent" | "not-configured" | "failed";
 
 const inputClasses =
-  "w-full rounded-xl border border-border bg-background px-4 py-3 text-[15px] text-foreground placeholder:text-muted/70 transition-colors focus:border-accent focus:outline-none";
+  "w-full rounded-2xl border-[3px] border-ink bg-paper px-4 py-3 text-[15px] font-medium text-ink placeholder:text-ink/40 transition-shadow focus:shadow-[4px_4px_0_#141414] focus:outline-none";
+
+const LABEL_CLASSES = "font-label mb-2 block text-sm tracking-[0.12em] text-ink uppercase";
 
 export default function Contact() {
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
@@ -56,57 +58,70 @@ export default function Contact() {
     }
   };
 
+  const cards = [
+    {
+      href: `mailto:${siteConfig.email}`,
+      external: false,
+      icon: Mail,
+      chip: "bg-pop-yellow",
+      label: "Email",
+      value: siteConfig.email,
+    },
+    {
+      href: siteConfig.linkedin,
+      external: true,
+      icon: Linkedin,
+      chip: "bg-pop-sky",
+      label: "LinkedIn",
+      value: "Connect with me on LinkedIn",
+    },
+    {
+      href: siteConfig.github,
+      external: true,
+      icon: Github,
+      chip: "bg-pop-mint",
+      label: "GitHub",
+      value: "github.com/Sahilssr1",
+    },
+  ];
+
   return (
-    <section id="contact" className="scroll-mt-24 py-24">
+    <section id="contact" className="dots-dark scroll-mt-24 bg-pop-pink py-24">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <SectionHeading
           eyebrow="Contact"
-          title="Let's Build Something"
+          title="Let's Talk!"
           description="I'm interested in software engineering opportunities and interesting projects. The fastest way to reach me is email — I read everything personally."
+          accentClass="bg-cream"
         />
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <Reveal>
-            <div className="space-y-4">
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="flex items-center gap-4 rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-accent/60"
-              >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
-                  <Mail className="h-5 w-5" />
-                </span>
-                <span>
-                  <span className="block text-xs font-semibold tracking-widest text-muted uppercase">Email</span>
-                  <span className="mt-0.5 block text-[15px] font-medium break-all text-foreground">{siteConfig.email}</span>
-                </span>
-              </a>
-              <a
-                href={siteConfig.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-4 rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-accent/60"
-              >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
-                  <Linkedin className="h-5 w-5" />
-                </span>
-                <span>
-                  <span className="block text-xs font-semibold tracking-widest text-muted uppercase">LinkedIn</span>
-                  <span className="mt-0.5 block text-[15px] font-medium text-foreground">Connect with me on LinkedIn</span>
-                </span>
-              </a>
-              <a
-                href={siteConfig.github}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-4 rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-accent/60"
-              >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
-                  <Github className="h-5 w-5" />
-                </span>
-                <span>
-                  <span className="block text-xs font-semibold tracking-widest text-muted uppercase">GitHub</span>
-                  <span className="mt-0.5 block text-[15px] font-medium text-foreground">github.com/Sahilssr1</span>
-                </span>
-              </a>
+            <div className="space-y-5">
+              {cards.map((card, i) => (
+                <a
+                  key={card.label}
+                  href={card.href}
+                  {...(card.external ? { target: "_blank", rel: "noreferrer" } : {})}
+                  className={`pop pop-hover flex items-center gap-4 rounded-3xl bg-cream p-5 ${
+                    i % 2 === 0 ? "-rotate-[0.5deg]" : "rotate-[0.5deg]"
+                  }`}
+                >
+                  <span
+                    className={`pop-sm flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-ink ${card.chip}`}
+                  >
+                    <card.icon className="h-5 w-5" />
+                  </span>
+                  <span>
+                    <span className="font-label block text-xs tracking-[0.16em] text-ink/55 uppercase">
+                      {card.label}
+                    </span>
+                    <span className="mt-0.5 block text-[15px] font-bold break-all text-ink">{card.value}</span>
+                  </span>
+                </a>
+              ))}
+              <div className="pop-sm font-label inline-block rotate-1 rounded-full bg-ink px-4 py-2 text-[13px] tracking-[0.12em] text-pop-yellow uppercase">
+                ★ I usually reply within a day
+              </div>
             </div>
           </Reveal>
 
@@ -114,27 +129,43 @@ export default function Contact() {
             <form
               onSubmit={handleSubmit(onSubmit)}
               noValidate
-              className="rounded-2xl border border-border bg-surface p-6 sm:p-8"
+              className="pop-lg rounded-[26px] bg-cream p-6 sm:p-8"
               aria-label="Contact form"
             >
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="contact-name" className={LABEL_CLASSES}>
                     Your name
                   </label>
-                  <input id="contact-name" type="text" autoComplete="name" placeholder="Jane Smith" className={inputClasses} {...register("name")} />
-                  {errors.name ? <p className="mt-1.5 text-sm text-red-500">{errors.name.message}</p> : null}
+                  <input
+                    id="contact-name"
+                    type="text"
+                    autoComplete="name"
+                    placeholder="Jane Smith"
+                    className={inputClasses}
+                    {...register("name")}
+                  />
+                  {errors.name ? <p className="mt-1.5 text-sm font-semibold text-red-600">{errors.name.message}</p> : null}
                 </div>
                 <div>
-                  <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="contact-email" className={LABEL_CLASSES}>
                     Your email
                   </label>
-                  <input id="contact-email" type="email" autoComplete="email" placeholder="jane@company.com" className={inputClasses} {...register("email")} />
-                  {errors.email ? <p className="mt-1.5 text-sm text-red-500">{errors.email.message}</p> : null}
+                  <input
+                    id="contact-email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="jane@company.com"
+                    className={inputClasses}
+                    {...register("email")}
+                  />
+                  {errors.email ? (
+                    <p className="mt-1.5 text-sm font-semibold text-red-600">{errors.email.message}</p>
+                  ) : null}
                 </div>
               </div>
               <div className="mt-5">
-                <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-foreground">
+                <label htmlFor="contact-message" className={LABEL_CLASSES}>
                   Message
                 </label>
                 <textarea
@@ -144,26 +175,35 @@ export default function Contact() {
                   className={`${inputClasses} resize-y`}
                   {...register("message")}
                 />
-                {errors.message ? <p className="mt-1.5 text-sm text-red-500">{errors.message.message}</p> : null}
+                {errors.message ? (
+                  <p className="mt-1.5 text-sm font-semibold text-red-600">{errors.message.message}</p>
+                ) : null}
               </div>
 
               <button
                 type="submit"
                 disabled={submitState === "sending" || submitState === "sent"}
-                className="btn-primary mt-6 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-60"
+                className="pop pop-hover pop-press font-label mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 text-base tracking-[0.08em] text-cream uppercase disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {submitState === "sending" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                {submitState === "sending" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
                 {submitState === "sending" ? "Sending…" : submitState === "sent" ? "Message Sent" : "Send Message"}
               </button>
 
               {submitState === "sent" ? (
-                <p className="mt-4 flex items-start gap-2 rounded-xl bg-emerald-500/10 px-4 py-3 text-sm text-emerald-600 dark:text-emerald-400" role="status">
+                <p
+                  className="pop-sm mt-5 flex items-start gap-2 rounded-2xl bg-pop-mint px-4 py-3 text-sm font-semibold text-ink"
+                  role="status"
+                >
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
                   Thank you — your message has been sent. I&apos;ll get back to you soon.
                 </p>
               ) : null}
               {submitState === "not-configured" ? (
-                <div className="mt-4 rounded-xl bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300" role="status">
+                <div className="pop-sm mt-5 rounded-2xl bg-pop-yellow px-4 py-3.5 text-sm font-semibold text-ink" role="status">
                   <p className="flex items-start gap-2">
                     <MailWarning className="mt-0.5 h-4 w-4 shrink-0" />
                     The form&apos;s email service isn&apos;t configured on this deployment yet. You can still send
@@ -171,7 +211,7 @@ export default function Contact() {
                   </p>
                   <a
                     href={mailtoHref()}
-                    className="mt-3 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white"
+                    className="pop-sm pop-hover pop-press font-label mt-3 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm tracking-[0.06em] text-cream uppercase"
                   >
                     <Mail className="h-4 w-4" />
                     Open in Email App
@@ -179,9 +219,12 @@ export default function Contact() {
                 </div>
               ) : null}
               {submitState === "failed" ? (
-                <p className="mt-4 rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-400" role="alert">
+                <p
+                  className="pop-sm mt-5 rounded-2xl bg-[#ffd9d9] px-4 py-3 text-sm font-semibold text-ink"
+                  role="alert"
+                >
                   Something went wrong while sending. Please email me directly at{" "}
-                  <a href={`mailto:${siteConfig.email}`} className="font-semibold underline">
+                  <a href={`mailto:${siteConfig.email}`} className="font-bold underline">
                     {siteConfig.email}
                   </a>
                   .

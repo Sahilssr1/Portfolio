@@ -1,44 +1,34 @@
-const ITEMS = [
-  "ASP.NET",
-  "React",
-  "TypeScript",
-  "Flutter",
-  "FastAPI",
-  "MySQL",
-  "PostgreSQL",
-  "Firebase",
-  "Docker",
-  "REST APIs",
-  "Next.js",
-  "Tailwind CSS",
-  "Cloudflare",
-  "Node.js",
-  "WebSockets",
-  "Git & GitHub",
-];
+const ITEMS = ["WEB", "MOBILE", "AI", "APIS", "DATABASES", "CLOUD", "OPEN SOURCE"];
+const STAR_COLORS = ["text-pop-yellow", "text-pop-pink", "text-pop-violet", "text-pop-mint"];
 
 function Row({ hidden }: { hidden?: boolean }) {
   return (
     <div aria-hidden={hidden || undefined} className="flex shrink-0 items-center">
-      {ITEMS.map((item) => (
+      {ITEMS.map((item, i) => (
         <span key={item} className="flex items-center">
-          <span className="font-display px-6 text-lg font-semibold tracking-wide whitespace-nowrap text-muted transition-colors hover:text-accent sm:text-xl">
+          <span className="font-display px-6 text-2xl whitespace-nowrap text-cream uppercase sm:text-3xl">
             {item}
           </span>
-          <span className="h-1.5 w-1.5 rotate-45 bg-accent/60" aria-hidden="true" />
+          <span className={`text-2xl ${STAR_COLORS[i % STAR_COLORS.length]}`} aria-hidden="true">
+            ✦
+          </span>
         </span>
       ))}
     </div>
   );
 }
 
-/** Infinite technology marquee — decorative duplicate of the skills listed below. */
+/** Tilted black marquee strip — the reference's signature band. */
 export default function TechMarquee() {
   return (
-    <div className="marquee-mask overflow-hidden border-y border-border bg-surface/40 py-5" aria-label="Technologies I work with">
-      <div className="animate-marquee flex w-max">
-        <Row />
-        <Row hidden />
+    <div className="relative z-10 -my-2 overflow-hidden" aria-label="What I build: web, mobile, AI, APIs, databases, cloud">
+      <div className="-mx-4 -rotate-[1.3deg] border-y-[3px] border-ink bg-ink py-3.5">
+        <div className="animate-marquee flex w-max">
+          <Row />
+          <Row hidden />
+          <Row hidden />
+          <Row hidden />
+        </div>
       </div>
     </div>
   );
