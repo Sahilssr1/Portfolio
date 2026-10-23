@@ -80,13 +80,13 @@ function SkillTile({ skill, reduce }: { skill: string; reduce: boolean }) {
       }}
       transition={{ type: "spring", stiffness: 320, damping: 17 }}
       whileHover={reduce ? undefined : { y: -5, rotate: -2, scale: 1.05 }}
-      className="group flex flex-col items-center gap-2 rounded-2xl border-2 border-cream/15 bg-cream/[0.04] px-2 py-3.5 text-center transition-colors hover:border-cream/50 hover:bg-cream/[0.09]"
+      className="group flex flex-col items-center gap-1.5 rounded-2xl border-2 border-cream/15 bg-cream/[0.04] px-2 py-2.5 text-center transition-colors hover:border-cream/50 hover:bg-cream/[0.09]"
     >
-      <span className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-ink bg-cream shadow-[3px_3px_0_rgba(0,0,0,0.55)] transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-110">
+      <span className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-ink bg-cream shadow-[3px_3px_0_rgba(0,0,0,0.55)] transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-110">
         {brand ? (
-          <Image src={brand} alt="" width={24} height={24} className="h-6 w-6" unoptimized />
+          <Image src={brand} alt="" width={20} height={20} className="h-5 w-5" unoptimized />
         ) : Fallback ? (
-          <Fallback className="h-6 w-6 text-ink" aria-hidden="true" />
+          <Fallback className="h-5 w-5 text-ink" aria-hidden="true" />
         ) : null}
       </span>
       <span className="text-xs leading-tight font-semibold text-cream/85">{skill}</span>
@@ -106,20 +106,20 @@ export default function Skills() {
           accentClass="bg-pop-pink"
           tone="cream"
         />
-        <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid items-start gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {skillCategories.map((category, i) => {
             const Icon = CATEGORY_ICONS[i % CATEGORY_ICONS.length];
             const style = CATEGORY_STYLES[i % CATEGORY_STYLES.length];
             return (
-              <Reveal key={category.title} delay={i * 0.06} className="h-full">
+              <Reveal key={category.title} delay={i * 0.06}>
                 <div
-                  className={`h-full rounded-3xl border-[3px] border-cream bg-[#1d1d1d] p-6 transition-transform duration-200 hover:-translate-y-1.5 ${style.shadow}`}
+                  className={`rounded-3xl border-[3px] border-cream bg-[#1d1d1d] p-5 transition-transform duration-200 hover:-translate-y-1.5 ${style.shadow}`}
                 >
                   <div className="flex items-center gap-3">
                     <motion.span
                       animate={reduce ? undefined : { y: [0, -3.5, 0] }}
                       transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut", delay: i * 0.35 }}
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border-[2.5px] border-ink text-ink ${style.chip}`}
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border-[2.5px] border-ink text-ink ${style.chip}`}
                     >
                       <Icon className="h-5 w-5" />
                     </motion.span>
@@ -138,7 +138,7 @@ export default function Skills() {
                     variants={{
                       show: { transition: { staggerChildren: reduce ? 0 : 0.05, delayChildren: 0.1 } },
                     }}
-                    className="mt-6 grid grid-cols-3 gap-2.5"
+                    className="mt-5 grid grid-cols-3 gap-3"
                     aria-label={`${category.title} skills`}
                   >
                     {category.skills.map((skill) => (
