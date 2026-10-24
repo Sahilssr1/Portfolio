@@ -49,41 +49,94 @@ function useTypewriter(disabled: boolean): string {
       }
       timer = setTimeout(tick, delay);
     };
-    timer = setTimeout(tick, 500);
+    // First tick waits ~2.4s so typing starts as the pill fades in after the preloader sequence.
+    timer = setTimeout(tick, 2400);
     return () => clearTimeout(timer);
   }, [disabled]);
   return text;
 }
 
+/**
+ * Headline line in the two26 style: the whole line starts pushed 112% down
+ * inside an overflow-hidden mask (invisible) and rises smoothly into place —
+ * no bounce, no per-letter motion. Delay is absolute (sequenced after the
+ * preloader), matching the reference site's opening timeline.
+ */
 function MegaLine({
   text,
   className,
-  delayBase,
+  delay,
   reduce,
 }: {
   text: string;
   className: string;
-  delayBase: number;
+  delay: number;
   reduce: boolean;
 }) {
   return (
-    <span className={`block whitespace-nowrap ${className}`} aria-hidden="true">
-      {text.split("").map((ch, i) => (
-        <motion.span
-          key={i}
-          className="inline-block whitespace-pre"
-          initial={reduce ? { opacity: 0 } : { y: 60, opacity: 0, rotate: 6, scale: 0.8 }}
-          animate={reduce ? { opacity: 1 } : { y: 0, opacity: 1, rotate: 0, scale: 1 }}
-          transition={
-            reduce
-              ? { duration: 0 }
-              : { type: "spring", stiffness: 320, damping: 17, delay: delayBase + i * 0.045 }
-          }
-        >
-          {ch}
-        </motion.span>
-      ))}
+    <span className="block overflow-hidden" aria-hidden="true">
+      <motion.span
+        className={`block whitespace-nowrap ${className}`}
+        initial={reduce ? { opacity: 0 } : { y: "112%", opacity: 0 }}
+        animate={reduce ? { opacity: 1 } : { y: "0%", opacity: 1 }}
+        transition={
+          reduce ? { duration: 0 } : { duration: 0.8, delay, ease: [0.25, 0.6, 0.25, 1] as const }
+        }
+      >
+        {text}
+      </motion.span>
     </span>
+  );
+}
+
+/**
+ * Opening preloader, modelled on two26.studio: blush screen, an orange
+ * squiggle draws itself, the name mark pops in, then the whole screen wipes
+ * up and the hero timeline (delays in Hero) takes over. Plays once per page
+ * load; skipped entirely for reduced-motion visitors.
+ */
+function Preloader({ reduce }: { reduce: boolean }) {
+  const [gone, setGone] = useState(false);
+  useEffect(() => {
+    if (reduce) {
+      setGone(true);
+      return;
+    }
+    const t = setTimeout(() => setGone(true), 2000);
+    return () => clearTimeout(t);
+  }, [reduce]);
+
+  if (gone || reduce) return null;
+
+  return (
+    <motion.div
+      aria-hidden="true"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-3 bg-[#f6dfd2]"
+      initial={{ y: 0 }}
+      animate={{ y: "-100%" }}
+      transition={{ delay: 1.25, duration: 0.6, ease: [0.7, 0, 0.3, 1] }}
+    >
+      <svg width="76" height="32" viewBox="0 0 72 30" fill="none">
+        <motion.path
+          d="M3 22 C 12 4, 20 4, 26 15 S 40 28, 47 12 S 62 4, 69 14"
+          stroke="#ff5a00"
+          strokeWidth={4}
+          strokeLinecap="round"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 0.7, ease: "easeInOut" }}
+        />
+      </svg>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.7 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.45, type: "spring", stiffness: 260, damping: 14 }}
+        className="font-display text-center leading-none text-[#ff5a00]"
+      >
+        <span className="block text-sm tracking-[0.35em]">SAHIL</span>
+        <span className="mt-1 block text-4xl">KUMAR</span>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -104,10 +157,11 @@ export default function Hero() {
 
   return (
     <section id="home" ref={sectionRef} className="dots relative overflow-hidden pt-[76px]">
+      <Preloader reduce={!!reduce} />
       <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 pt-8 pb-10 sm:px-8 lg:min-h-[calc(100svh-76px)] lg:grid-cols-[1.08fr_0.92fr] lg:pt-8 lg:pb-10">
         <div>
           {siteConfig.showAvailability ? (
-            <motion.p {...popIn(0.05)}>
+            <motion.p {...popIn(2.35)}>
               <span className="pop-sm font-label inline-flex items-center gap-2.5 rounded-full bg-pop-yellow px-4 py-2 text-[13px] tracking-[0.12em] text-ink uppercase">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink opacity-50" />
@@ -122,14 +176,14 @@ export default function Hero() {
             <MegaLine
               text="Sahil"
               reduce={!!reduce}
-              delayBase={0.12}
+              delay={1.5}
               className="text-[clamp(2.9rem,7.2vw,5.6rem)] leading-[0.95] text-ink"
             />
             <span className="flex items-center gap-3 sm:gap-5">
               <MegaLine
                 text="Kumar"
                 reduce={!!reduce}
-                delayBase={0.38}
+                delay={1.6}
                 className="shrink-0 text-[clamp(2.9rem,7.2vw,5.6rem)] leading-[0.95] text-pop-violet"
               />
               <motion.span
@@ -137,7 +191,7 @@ export default function Hero() {
                 initial={{ scale: 0, rotate: -40 }}
                 animate={{ scale: 1, rotate: 10 }}
                 transition={
-                  reduce ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 12, delay: 0.72 }
+                  reduce ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 12, delay: 2.0 }
                 }
                 className="pop-sm flex h-[clamp(2.9rem,5.5vw,4.4rem)] w-[clamp(2.9rem,5.5vw,4.4rem)] shrink-0 items-center justify-center rounded-full bg-pop-pink"
               >
@@ -147,13 +201,13 @@ export default function Hero() {
             <MegaLine
               text="Full-Stack"
               reduce={!!reduce}
-              delayBase={0.62}
+              delay={1.7}
               className="text-[clamp(1.8rem,4.2vw,3.3rem)] leading-[1.02] text-ink"
             />
             <MegaLine
               text="Developer"
               reduce={!!reduce}
-              delayBase={0.95}
+              delay={1.8}
               className="text-[clamp(1.8rem,4.2vw,3.3rem)] leading-[1.02] text-pop-pink"
             />
           </h1>
@@ -162,7 +216,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={reduce ? { duration: 0 } : { delay: 1.15, duration: 0.45, ease: "easeOut" }}
+            transition={reduce ? { duration: 0 } : { delay: 2.5, duration: 0.45, ease: "easeOut" }}
             className="mt-5"
           >
             {reduce ? (
@@ -186,7 +240,7 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={reduce ? { duration: 0 } : { delay: 1.28, duration: 0.5, ease: "easeOut" }}
+            transition={reduce ? { duration: 0 } : { delay: 2.62, duration: 0.5, ease: "easeOut" }}
             className="mt-5 max-w-xl text-lg leading-snug font-semibold text-ink"
           >
             I build{" "}
@@ -196,7 +250,7 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={reduce ? { duration: 0 } : { delay: 1.36, duration: 0.5, ease: "easeOut" }}
+            transition={reduce ? { duration: 0 } : { delay: 2.72, duration: 0.5, ease: "easeOut" }}
             className="mt-3 max-w-xl text-[15px] leading-relaxed font-medium text-ink/70"
           >
             I&apos;m a full-stack developer focused on building reliable web and mobile applications, backend APIs,
@@ -206,7 +260,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={reduce ? { duration: 0 } : { delay: 1.46, duration: 0.5, ease: "easeOut" }}
+            transition={reduce ? { duration: 0 } : { delay: 2.82, duration: 0.5, ease: "easeOut" }}
             className="mt-7 flex flex-wrap items-center gap-4"
           >
             <a
@@ -248,7 +302,7 @@ export default function Hero() {
           <motion.ul
             initial="hidden"
             animate="show"
-            variants={{ show: { transition: { staggerChildren: reduce ? 0 : 0.05, delayChildren: 1.55 } } }}
+            variants={{ show: { transition: { staggerChildren: reduce ? 0 : 0.05, delayChildren: 2.95 } } }}
             className="mt-7 flex flex-wrap gap-2.5"
             aria-label="Core technologies"
           >
@@ -273,7 +327,7 @@ export default function Hero() {
           <motion.div
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.8, rotate: 10 }}
             animate={{ opacity: 1, scale: 1, rotate: 3 }}
-            transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 160, damping: 15, delay: 0.55 }}
+            transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 160, damping: 15, delay: 2.3 }}
             className="relative"
           >
             <motion.div
@@ -299,7 +353,7 @@ export default function Hero() {
               initial={{ scale: 0, rotate: -30 }}
               animate={{ scale: 1, rotate: 10 }}
               transition={
-                reduce ? { duration: 0 } : { type: "spring", stiffness: 240, damping: 12, delay: 1.0 }
+                reduce ? { duration: 0 } : { type: "spring", stiffness: 240, damping: 12, delay: 2.6 }
               }
               className="pop-sm font-label absolute -top-7 -left-5 flex h-[104px] w-[104px] flex-col items-center justify-center rounded-full bg-pop-yellow text-center text-[11px] leading-tight tracking-wide text-ink uppercase sm:-left-9"
               aria-label="5,000 plus downloads on Google Play"
@@ -317,7 +371,7 @@ export default function Hero() {
               initial={{ scale: 0, rotate: 12 }}
               animate={{ scale: 1, rotate: -4 }}
               transition={
-                reduce ? { duration: 0 } : { type: "spring", stiffness: 240, damping: 12, delay: 1.15 }
+                reduce ? { duration: 0 } : { type: "spring", stiffness: 240, damping: 12, delay: 2.75 }
               }
               className="pop-sm pop-hover font-label absolute -right-3 -bottom-5 rounded-full bg-pop-mint px-4 py-2 text-[13px] tracking-[0.1em] text-ink uppercase sm:-right-6"
             >
