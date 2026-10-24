@@ -9,7 +9,7 @@ export const siteConfig = {
   title: "Sahil Kumar — Software Engineer | Full Stack Developer",
   description:
     "Portfolio of Sahil Kumar, a software engineer and full-stack developer building scalable web and mobile applications, REST APIs, and database-driven systems with ASP.NET, React, Flutter, and FastAPI.",
-  url: "https://sahil-sahils-projects-be6abc0e.vercel.app",
+  url: "https://sahilssr-portfolio.vercel.app",
   email: "Sahilsinghrajput394@gmail.com",
   github: "https://github.com/Sahilssr1",
   githubUsername: "Sahilssr1",
