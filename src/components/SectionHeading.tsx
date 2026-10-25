@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 interface SectionHeadingProps {
@@ -12,6 +13,8 @@ interface SectionHeadingProps {
   tone?: "ink" | "cream";
   /** Background color for the sticker shadow contrast on colored sections. */
   shadowClass?: string;
+  /** Replaces the animated h2 entirely, e.g. a FallingText heading. */
+  titleNode?: ReactNode;
 }
 
 export default function SectionHeading({
@@ -21,6 +24,7 @@ export default function SectionHeading({
   accentClass = "bg-pop-yellow",
   tone = "ink",
   shadowClass = "",
+  titleNode,
 }: SectionHeadingProps) {
   const reduce = useReducedMotion();
   const words = title.split(" ");
@@ -37,43 +41,47 @@ export default function SectionHeading({
       >
         ★ {eyebrow}
       </motion.p>
-      <h2
-        className={`font-display mt-6 text-4xl leading-[1.04] uppercase sm:text-5xl ${
-          tone === "cream" ? "text-cream" : "text-ink"
-        }`}
-      >
-        {headWords.map((word, i) => (
-          <span key={i} className="inline-block overflow-hidden pb-1 align-bottom">
+      {titleNode ? (
+        <div className="mt-6">{titleNode}</div>
+      ) : (
+        <h2
+          className={`font-display mt-6 text-4xl leading-[1.04] uppercase sm:text-5xl ${
+            tone === "cream" ? "text-cream" : "text-ink"
+          }`}
+        >
+          {headWords.map((word, i) => (
+            <span key={i} className="inline-block overflow-hidden pb-1 align-bottom">
+              <motion.span
+                className="inline-block"
+                initial={reduce ? { opacity: 0 } : { y: "108%" }}
+                whileInView={reduce ? { opacity: 1 } : { y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={
+                  reduce ? { duration: 0 } : { type: "spring", stiffness: 210, damping: 21, delay: 0.07 * i }
+                }
+              >
+                {word}
+                {"\u00A0"}
+              </motion.span>
+            </span>
+          ))}
+          <span className="inline-block overflow-hidden pb-1 align-bottom">
             <motion.span
-              className="inline-block"
+              className={`inline-block ${tone === "cream" ? "text-pop-yellow" : "text-pop-violet"}`}
               initial={reduce ? { opacity: 0 } : { y: "108%" }}
               whileInView={reduce ? { opacity: 1 } : { y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={
-                reduce ? { duration: 0 } : { type: "spring", stiffness: 210, damping: 21, delay: 0.07 * i }
+                reduce
+                  ? { duration: 0 }
+                  : { type: "spring", stiffness: 210, damping: 21, delay: 0.07 * headWords.length }
               }
             >
-              {word}
-              {"\u00A0"}
+              {lastWord}
             </motion.span>
           </span>
-        ))}
-        <span className="inline-block overflow-hidden pb-1 align-bottom">
-          <motion.span
-            className={`inline-block ${tone === "cream" ? "text-pop-yellow" : "text-pop-violet"}`}
-            initial={reduce ? { opacity: 0 } : { y: "108%" }}
-            whileInView={reduce ? { opacity: 1 } : { y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={
-              reduce
-                ? { duration: 0 }
-                : { type: "spring", stiffness: 210, damping: 21, delay: 0.07 * headWords.length }
-            }
-          >
-            {lastWord}
-          </motion.span>
-        </span>
-      </h2>
+        </h2>
+      )}
       {description ? (
         <motion.p
           initial={{ opacity: 0, y: 14 }}

@@ -7,6 +7,7 @@ import { z } from "zod";
 import { CheckCircle2, Github, Linkedin, Loader2, Mail, MailWarning, Send } from "lucide-react";
 import { siteConfig } from "@/data/content";
 import SectionHeading from "./SectionHeading";
+import FallingText from "./FallingText";
 import Reveal from "./Reveal";
 
 const formSchema = z.object({
@@ -97,6 +98,29 @@ export default function Contact() {
         <SectionHeading
           eyebrow="Contact"
           title="Let's Talk!"
+          titleNode={
+            <FallingText
+              text="Let's Talk!"
+              split="letters"
+              trigger="scroll"
+              order="sequence"
+              stagger={0.03}
+              gravity={1}
+              bounciness={0.4}
+              scatter={0.5}
+              draggable
+              cursorPush={0.5}
+              restoreDelay={2.5}
+              highlightWords={["Talk!"]}
+              accentColor="#7b61ff"
+              theme="light"
+              backgroundColor="transparent"
+              align="left"
+              fontSize="clamp(2.25rem,4vw,3rem)"
+              className="font-display uppercase text-ink"
+              style={{ height: "clamp(4.8rem,8vw,7.2rem)", width: "fit-content" }}
+            />
+          }
           description="I'm interested in software engineering opportunities and interesting projects. The fastest way to reach me is email — I read everything personally."
           accentClass="bg-cream"
         />

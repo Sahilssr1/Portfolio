@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, Download, Github, Hand, Linkedin, Zap } from "lucide-react";
 import Image from "next/image";
+import FallingText from "./FallingText";
 import { siteConfig } from "@/data/content";
 
 const ROLES = [
@@ -143,6 +144,15 @@ function Preloader({ reduce }: { reduce: boolean }) {
 export default function Hero() {
   const reduce = useReducedMotion();
   const typed = useTypewriter(!!reduce);
+  // Gravity letters for "Kumar": the line first rises like the rest of the
+  // headline, then (once the preloader is gone) swaps to FallingText, whose
+  // letters tumble with gravity, bounce, and spring back into place.
+  const [introDone, setIntroDone] = useState(false);
+  useEffect(() => {
+    if (reduce) return;
+    const t = setTimeout(() => setIntroDone(true), 2000);
+    return () => clearTimeout(t);
+  }, [reduce]);
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const mascotY = useTransform(scrollYProgress, [0, 1], [0, -40]);
@@ -180,12 +190,37 @@ export default function Hero() {
               className="text-[clamp(2.9rem,7.2vw,5.6rem)] leading-[0.95] text-ink"
             />
             <span className="flex items-center gap-3 sm:gap-5">
-              <MegaLine
-                text="Kumar"
-                reduce={!!reduce}
-                delay={1.6}
-                className="shrink-0 text-[clamp(2.9rem,7.2vw,5.6rem)] leading-[0.95] text-pop-violet"
-              />
+              {introDone ? (
+                <span className="block shrink-0" style={{ width: "fit-content" }}>
+                  <FallingText
+                    text="Kumar"
+                    split="letters"
+                    trigger="auto"
+                    order="sequence"
+                    stagger={0.03}
+                    gravity={1}
+                    bounciness={0.35}
+                    scatter={0.5}
+                    draggable
+                    cursorPush={0.5}
+                    restoreDelay={2.2}
+                    fontSize="clamp(2.9rem,7.2vw,5.6rem)"
+                    accentColor="#7b61ff"
+                    theme="light"
+                    backgroundColor="transparent"
+                    align="left"
+                    className="font-display uppercase text-pop-violet"
+                    style={{ height: "clamp(4.6rem,11.5vw,9rem)", width: "fit-content" }}
+                  />
+                </span>
+              ) : (
+                <MegaLine
+                  text="Kumar"
+                  reduce={!!reduce}
+                  delay={1.6}
+                  className="shrink-0 text-[clamp(2.9rem,7.2vw,5.6rem)] leading-[0.95] text-pop-violet"
+                />
+              )}
               <motion.span
                 aria-hidden="true"
                 initial={{ scale: 0, rotate: -40 }}
