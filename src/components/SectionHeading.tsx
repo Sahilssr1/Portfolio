@@ -13,7 +13,7 @@ interface SectionHeadingProps {
   tone?: "ink" | "cream";
   /** Background color for the sticker shadow contrast on colored sections. */
   shadowClass?: string;
-  /** Replaces the animated h2 entirely, e.g. a FallingText heading. */
+  /** Replaces the animated h2 entirely, e.g. a GravityLetters heading. */
   titleNode?: ReactNode;
 }
 

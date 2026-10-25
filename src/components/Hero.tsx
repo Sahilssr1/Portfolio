@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, Download, Github, Hand, Linkedin, Zap } from "lucide-react";
 import Image from "next/image";
-import FallingText from "./FallingText";
+import GravityLetters, { type GravityLettersHandle } from "./GravityLetters";
 import { siteConfig } from "@/data/content";
 
 const ROLES = [
@@ -144,15 +144,23 @@ function Preloader({ reduce }: { reduce: boolean }) {
 export default function Hero() {
   const reduce = useReducedMotion();
   const typed = useTypewriter(!!reduce);
-  // Gravity letters for "Kumar": the line first rises like the rest of the
-  // headline, then (once the preloader is gone) swaps to FallingText, whose
-  // letters tumble with gravity, bounce, and spring back into place.
+  // Gravity Letters for "Kumar": the line first rises like the rest of the
+  // headline, then (once the preloader is gone) swaps to glyph sand, which
+  // collapses once on its own and can be sliced or clicked afterwards.
   const [introDone, setIntroDone] = useState(false);
   useEffect(() => {
     if (reduce) return;
     const t = setTimeout(() => setIntroDone(true), 2000);
     return () => clearTimeout(t);
   }, [reduce]);
+  // Gravity Letters: once the preloader is gone, collapse the headline once
+  // so visitors see the sand fall and pour back even without touching it.
+  const glRef = useRef<GravityLettersHandle>(null);
+  useEffect(() => {
+    if (!introDone || reduce) return;
+    const t = setTimeout(() => glRef.current?.collapse(0.5, 0.25), 1400);
+    return () => clearTimeout(t);
+  }, [introDone, reduce]);
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const mascotY = useTransform(scrollYProgress, [0, 1], [0, -40]);
@@ -189,30 +197,22 @@ export default function Hero() {
               delay={1.5}
               className="text-[clamp(2.9rem,7.2vw,5.6rem)] leading-[0.95] text-ink"
             />
-            <span className="flex items-center gap-3 sm:gap-5">
+            <span className="flex items-start gap-3 sm:gap-5">
               {introDone ? (
-                <span className="block shrink-0" style={{ width: "fit-content" }}>
-                  <FallingText
-                    text="Kumar"
-                    split="letters"
-                    trigger="auto"
-                    order="sequence"
-                    stagger={0.03}
-                    gravity={1}
-                    bounciness={0.35}
-                    scatter={0.5}
-                    draggable
-                    cursorPush={0.5}
-                    restoreDelay={2.2}
-                    fontSize="clamp(2.9rem,7.2vw,5.6rem)"
-                    accentColor="#7b61ff"
-                    theme="light"
-                    backgroundColor="transparent"
-                    align="left"
-                    className="font-display uppercase text-pop-violet"
-                    style={{ height: "clamp(4.6rem,11.5vw,9rem)", width: "fit-content" }}
-                  />
-                </span>
+                <GravityLetters
+                  ref={glRef}
+                  text="Kumar"
+                  fontSize={90}
+                  fontWeight={400}
+                  fontFamily='"Archivo Black", "Arial Black", sans-serif'
+                  colors={["#7b61ff", "#8f7bf0"]}
+                  grainSize={5}
+                  grainScale={1.6}
+                  anchor="top"
+                  clickToCollapse
+                  className="shrink-0"
+                  style={{ height: "clamp(4.6rem,11.5vw,9rem)", width: "clamp(10.5rem,26vw,20.5rem)" }}
+                />
               ) : (
                 <MegaLine
                   text="Kumar"
@@ -228,7 +228,7 @@ export default function Hero() {
                 transition={
                   reduce ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 12, delay: 2.0 }
                 }
-                className="pop-sm flex h-[clamp(2.9rem,5.5vw,4.4rem)] w-[clamp(2.9rem,5.5vw,4.4rem)] shrink-0 items-center justify-center rounded-full bg-pop-pink"
+                className="pop-sm mt-[clamp(0.6rem,1.5vw,1.05rem)] flex h-[clamp(2.9rem,5.5vw,4.4rem)] w-[clamp(2.9rem,5.5vw,4.4rem)] shrink-0 items-center justify-center rounded-full bg-pop-pink"
               >
                 <Zap className="h-[55%] w-[55%] fill-ink text-ink" />
               </motion.span>
