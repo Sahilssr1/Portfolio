@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, Download, Github, Hand, Linkedin, Zap } from "lucide-react";
 import Image from "next/image";
-import GravityLetters, { type GravityLettersHandle } from "./GravityLetters";
+import ElasticLettering from "./ElasticLettering";
 import { siteConfig } from "@/data/content";
 
 const ROLES = [
@@ -144,23 +144,16 @@ function Preloader({ reduce }: { reduce: boolean }) {
 export default function Hero() {
   const reduce = useReducedMotion();
   const typed = useTypewriter(!!reduce);
-  // Gravity Letters for "Kumar": the line first rises like the rest of the
-  // headline, then (once the preloader is gone) swaps to glyph sand, which
-  // collapses once on its own and can be sliced or clicked afterwards.
+  // Elastic Lettering for "Kumar": the line first rises like the rest of the
+  // headline, then (once the preloader is gone) swaps to the elastic band —
+  // grab a letter, stretch it, fling it, and it springs back. A gentle tug
+  // (hint) fires once so visitors discover it is elastic.
   const [introDone, setIntroDone] = useState(false);
   useEffect(() => {
     if (reduce) return;
     const t = setTimeout(() => setIntroDone(true), 2000);
     return () => clearTimeout(t);
   }, [reduce]);
-  // Gravity Letters: once the preloader is gone, collapse the headline once
-  // so visitors see the sand fall and pour back even without touching it.
-  const glRef = useRef<GravityLettersHandle>(null);
-  useEffect(() => {
-    if (!introDone || reduce) return;
-    const t = setTimeout(() => glRef.current?.collapse(0.5, 0.25), 1400);
-    return () => clearTimeout(t);
-  }, [introDone, reduce]);
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const mascotY = useTransform(scrollYProgress, [0, 1], [0, -40]);
@@ -199,19 +192,24 @@ export default function Hero() {
             />
             <span className="flex items-start gap-3 sm:gap-5">
               {introDone ? (
-                <GravityLetters
-                  ref={glRef}
+                <ElasticLettering
                   text="Kumar"
-                  fontSize={90}
+                  fontSize="clamp(2.9rem,7.2vw,5.6rem)"
                   fontWeight={400}
                   fontFamily='"Archivo Black", "Arial Black", sans-serif'
-                  colors={["#7b61ff", "#8f7bf0"]}
-                  grainSize={5}
-                  grainScale={1.6}
-                  anchor="top"
-                  clickToCollapse
+                  lineHeight={0.95}
+                  color="#7b61ff"
+                  tensionColor="#ff5cab"
+                  tensionTint={0.8}
+                  tension={0.6}
+                  stiffness={1}
+                  bounce={0.62}
+                  reach={4}
+                  squash={0.5}
+                  tilt={0.5}
+                  lift={0.5}
+                  hint
                   className="shrink-0"
-                  style={{ height: "clamp(4.6rem,11.5vw,9rem)", width: "clamp(10.5rem,26vw,20.5rem)" }}
                 />
               ) : (
                 <MegaLine
