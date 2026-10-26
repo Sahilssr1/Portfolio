@@ -109,8 +109,12 @@ export default function Contact() {
               highlightColor="#7b61ff"
               grainSize={5}
               grainScale={1.6}
+              grain="dot"
+              collapseSpeed={900}
+              holdTime={0.5}
+              erosion={0.05}
               collapseOnView
-              style={{ height: "clamp(4.8rem,8vw,7.2rem)", width: "clamp(15rem,28vw,20rem)" }}
+              style={{ height: "clamp(5.2rem,15vw,7.2rem)", width: "min(100%,21rem)" }}
             />
           }
           description="I'm interested in software engineering opportunities and interesting projects. The fastest way to reach me is email — I read everything personally."

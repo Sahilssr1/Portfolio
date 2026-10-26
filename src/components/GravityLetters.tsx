@@ -225,8 +225,12 @@ export default function GravityLetters({
     let frameCount = 0;
     let collapsedOnce = false;
     let viewObserver: IntersectionObserver | null = null;
+    let viewTimer = 0;
     let resizeObserver: ResizeObserver | null = null;
-    const cell = () => propsRef.current.grainSize;
+    /** Grain cell in px. Shrinks to 4px when the fitted font is small so
+        short headings keep enough grains per letter to read. */
+    let cellPx = propsRef.current.grainSize;
+    const cell = () => cellPx;
     const sandColor = () => propsRef.current.colors[1];
 
     const key = (col: number, row: number) => `${col},${row}`;
@@ -254,6 +258,8 @@ export default function GravityLetters({
       const textW = measure.measureText(text).width;
       if (textW > 0) px = Math.min(px, (px * (w - 4)) / textW);
       px = Math.max(8, px);
+      // Small fitted text needs finer grains or the letters turn to noise.
+      cellPx = px < 40 ? Math.min(propsRef.current.grainSize, 4) : propsRef.current.grainSize;
 
       // Layout words left to right so highlight words can be tagged.
       const off = document.createElement("canvas");
@@ -432,7 +438,7 @@ export default function GravityLetters({
           if (!wi.total) continue;
           let home = 0;
           for (const g of grains) if (g.word === wi.index && g.state === "home") home++;
-          const a = (home / wi.total) * 0.32;
+          const a = (home / wi.total) * 0.55;
           if (a < 0.01) continue;
           ctx.globalAlpha = a;
           ctx.fillStyle = wi.highlight
@@ -444,7 +450,10 @@ export default function GravityLetters({
       }
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      if (p.grain === "glyph") ctx.font = `900 ${Math.max(4, gs)}px ui-monospace, monospace`;
+      // A grain glyph must not smear across its neighbours: at small sizes
+      // oversized glyphs turn the letters into unreadable noise.
+      const glyphPx = Math.max(4, Math.min(gs, cell() * 1.2));
+      if (p.grain === "glyph") ctx.font = `900 ${glyphPx}px ui-monospace, monospace`;
       for (const g of grains) {
         ctx.fillStyle = g.state === "home" ? g.color : sandColor();
         if (p.grain === "dot") {
@@ -632,11 +641,13 @@ export default function GravityLetters({
           const entry = entries[entries.length - 1];
           if (entry.isIntersecting && !collapsedOnce && built) {
             collapsedOnce = true;
-            collapse(0.5, 0.25);
+            // Let visitors read the solid heading first: collapse only once
+            // the section is well in view, after a short beat.
+            viewTimer = window.setTimeout(() => collapse(0.5, 0.25), 900);
             viewObserver?.disconnect();
           }
         },
-        { threshold: 0.3 },
+        { threshold: 0.5 },
       );
       viewObserver.observe(root);
     }
@@ -677,6 +688,7 @@ export default function GravityLetters({
       destroyed = true;
       cancelAnimationFrame(raf);
       window.clearTimeout(collapseTimer);
+      window.clearTimeout(viewTimer);
       window.clearTimeout(fontTimer);
       window.clearTimeout(resizeTimer);
       viewObserver?.disconnect();
