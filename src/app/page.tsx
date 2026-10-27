@@ -8,6 +8,7 @@ import Skills from "@/components/Skills";
 import Education from "@/components/Education";
 import GithubSection from "@/components/GithubSection";
 import Contact from "@/components/Contact";
+import DevCharacter from "@/components/DevCharacter";
 import Footer from "@/components/Footer";
 
 export default function HomePage() {
@@ -24,6 +25,7 @@ export default function HomePage() {
         <Education />
         <GithubSection />
         <Contact />
+        <DevCharacter />
       </main>
       <Footer />
     </>

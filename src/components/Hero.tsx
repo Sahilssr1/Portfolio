@@ -355,7 +355,7 @@ export default function Hero() {
           </motion.ul>
         </div>
 
-        {/* Mascot sticker card */}
+        {/* Character sticker card */}
         <motion.div style={reduce ? undefined : { y: mascotY }} className="relative mx-auto w-full max-w-[300px] sm:max-w-[330px]">
           <motion.div
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.8, rotate: 10 }}
@@ -369,10 +369,10 @@ export default function Hero() {
               className="pop-lg relative overflow-hidden rounded-[26px] bg-cream"
             >
               <Image
-                src="/mascot.webp"
-                alt="Glossy 3D mascot shaped like a code symbol, waving hello"
-                width={760}
-                height={1520}
+                src="/character/wave.webp"
+                alt="3D character of Sahil waving hello"
+                width={1264}
+                height={1872}
                 priority
                 className="h-auto w-full"
               />
